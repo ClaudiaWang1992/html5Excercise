@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+ <head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="王佳蕾">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>Document</title>
+ </head>
+ <body>
+	<script type="text/javascript">
+		var point={};
+		//point["[2,3]"]="nihao";
+		//alert(point["[2,3]"]);
+		var point={
+			'[2,3]':10,
+			'[1,4]':20,
+			'[1,0]':100,
+		};
+		var array=[2,9];
+		var obj={happy:1};
+		point[obj]=3000;
+		point[array]=1000;
+		point['3,7']=2000;
+		point2=point;
+		alert(point2===point);
+		alert(point2);
+		point2[array]=10000;
+		//alert(typeof array);
+		for(var key in point){
+			console.log("key:"+key+"value:"+point[key]);
+		}
+	</script>
+ </body>
+</html>

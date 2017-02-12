@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+ <head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="王佳蕾">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>Document</title>
+ </head>
+ <body>
+	<audio id="clickSound" controls>
+		<source src="johann_sebastian_bach_air.ogg"/>
+		<source src="johann_sebastian_bach_air.mp3">
+	</audio>
+	<button id="toggle" onclick="toggleSound()">Play</button>
+	<button id="volumeAdd">+</button>
+	<button id="volumeMin">-</button>
+	<script type="text/javascript">
+	    var music=document.getElementById("clickSound");
+		function toggleSound(){
+			var toggle=document.getElementById("toggle");
+			if(music.paused){
+				music.play();
+				toggle.innerHTML="Pause";
+			}else{
+				music.pause();
+				toggle.innerHTML="Play";
+			}
+		}
+		var add=document.getElementById("volumeAdd");
+		var min=document.getElementById("volumeMin");
+		add.onclick=function(){
+			music.volume+=0.1;
+		};
+		min.onclick=function(){
+			music.volume-=0.1;
+		};
+	</script>
+ </body>
+</html>

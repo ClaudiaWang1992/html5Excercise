@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+ <head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="王佳蕾">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>vedio timeline</title>
+	<style type="text/css">
+	*{
+	    padding:0px;
+	    margin:0px;
+	}
+		#box{
+		width:830px;
+		height:300px;
+		position:absolute;
+		left:0px;
+		right:0px;
+		top:0px;
+		bottom:0px;
+		margin:auto;
+		}
+		#movies{
+			width:400px;
+			height:300px;
+			position:relative;
+			float:left;
+			border:1px solid black;
+		}
+		#timeLine{
+			width:400px;
+			height:300px;
+			float:left;
+			margin-left:20px;
+			border:1px solid black;
+		}
+	</style>
+ </head>
+ <body>
+	<div id="box">
+		<video id="movies" autoplay autobuffer="true" controls oncanplay="startVideo()" onended="stopTimeLine()" width="400px" height="300px">
+			<source src="Intermission-Walk-in.ogv"></source>
+			<source src="Intermission-Walk-in_512kb.mp4"></source>
+		</video>
+		<canvas id="timeLine" width="400px" height="300px"></canvas>
+    </div>
+	<script type="text/javascript">
+		var video=document.getElementById("movies");
+		var timeLine = document.getElementById("timeLine");
+		var ctx=timeLine.getContext("2d");
+		//间隔时间设置5s
+		var updateInterval=5000;
+		//在canvas上每个时间点显示图像大小
+		var frameWidth=100;
+		var frameHeight=75;
+		//在canvas上显示的行数和列数
+		var frameRows=4;
+		var frameColumns=4;
+		var frameGrid=frameRows*frameColumns;
+		//当前截取的时间点图像
+		var frameCount=0;
+		//最终在视频播放完停止
+		var intervalid;
+
+		var videoStarted=false;
+
+		function startVideo(){
+			if(videoStarted){
+				return;
+			}
+			videoStarted=true;
+			updateFrame();
+			intervalid=setInterval(updateFrame,updateInterval);
+			//var timeLine = document.getElementById("timeLine");
+			timeLine.onclick=function(e){
+				var e=window.event||e;
+				var offX=e.pageX-getElement(this).left;
+				var offY=e.pageY-getElement(this).top;
+				//console.log(offX+" "+offY);
+				var clickedFrame=Math.floor(offY/frameHeight)*frameRows;
+				clickedFrame+=Math.floor(offX/frameWidth);
+				var seekedFrame=(((Math.floor(frameCount/frameGrid))*frameGrid)+clickedFrame);
+				if(clickedFrame>(frameCount%16)){
+					seekedFrame-=frameGrid;
+				}
+				if(seekedFrame<0){
+					return;
+				}
+				
+			    video.currentTime=seekedFrame*updateInterval/1000;
+			    frameCount=seekedFrame;
+			}
+		}
+		function updateFrame(){
+			//var video=document.getElementById("movies");
+			//var timeLine=document.getElementById("timeLine");
+			//var ctx=timeLine.getContext("2d");
+			var framePosition=frameCount%frameGrid;
+			var frameX=(framePosition%frameColumns)*frameWidth;
+			var frameY=(Math.floor(framePosition/frameRows))*frameHeight;
+			ctx.drawImage(video, 0, 0, 400, 300, frameX, frameY, frameWidth, frameHeight);
+			console.log(frameX+","+frameY+","+frameWidth+","+frameHeight);
+			frameCount++;
+		}
+		function stopTimeLine(){
+			clearInterval(intervalid);
+		}
+		function getElement(element){
+			var actual={left:0,top:0};
+			actual.left=element.offsetLeft;
+			actual.top=element.offsetTop;
+			var current=element.offsetParent;
+			while(current!=null){
+				actual.left+=current.offsetLeft;
+				actual.top+=current.offsetTop;
+				current=current.offsetParent;
+			}
+			return actual;
+		}
+	</script>
+ </body>
+</html>

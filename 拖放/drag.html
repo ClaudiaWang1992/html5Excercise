@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+ <head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="王佳蕾">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>drag</title>
+	<style type="text/css">
+	    body{
+			background-color:#cccccc;
+			font-family:Geneva,Arial,Helvetica,sans-serif;
+			margin:0px auto;
+			max-width:900px;
+			border:solid;
+			border-color:#ffffff;
+		}
+		header{
+			background-color:#f47d31;
+			display:block;
+			color:#ffffff;
+			text-align:center;
+			width:100%;
+		}
+		h1{
+			font-size:72px;
+			margin:0px;
+		}
+		h2{
+			font-size:24px;
+			margin:0px;
+			text-align:center;
+			color:#f47d31;
+		}
+		h3{
+			font-size:18px;
+			margin:0px;
+			text-align:center;
+			
+		}
+		h4{
+			color:#f47d31;
+			background-color:#fff;
+			-webkit-box-shadow:2px 2px 2px #888;
+			-webkit-transform:rotate(-45deg);
+			position:absolute;
+			padding:0px 150px;
+			top:50px;
+			left:-120px;
+			text-align:center;
+		}
+		header h2{
+			margin:0px;
+		}
+		nav{
+			display:block;
+			width:25%;
+			float:left;
+		}
+		nav a:link,nav a:visited{
+			display:block;
+			border-bottom:3px solid #fff;
+			padding:10px;
+			text-decoration:none;
+			font-weight:bold;
+			margin:5px;
+		}
+		nav a:hover{
+			color:white;
+			background-color:#f47d31;
+		}
+		nav h2{
+			margin:15px;
+			color:white;
+		}
+		#container{
+			background:#888;
+		}
+		section{
+			display:block;
+			width:50%;
+			float:left;
+		}
+		article{
+			background-color:#eee;
+			display:block;
+			margin:10px;
+			padding:10px;
+			-webkit-border-radius:10px;
+			-moz-border-radius:10px;
+			border-radius:10px;
+		}
+		article h2{
+		}
+		aside{
+			display:block;
+			width:25%;
+			float:left;
+		}
+		footer{
+			clear:both;
+			display:block;
+			background-color:#f47d31;
+			color:#ffffff;
+			text-align:center;
+			padding:15px;
+		}
+		article .dropList{
+			width:48%;
+			float:left;
+			margin:2px;
+			padding:2px;
+			-webkit-border-radius:10px;
+			-moz-border-radius:10px;
+			border-radius:10px;
+		}
+		article:after{
+			content:'.';
+			width:0px;
+			height:0px;
+			display:hidden;
+			clear:both;
+		}
+		#members li{
+			cursor:move;
+		}
+		#racers,#volunteers{
+			height:200px;
+
+		}
+		.highlighted{
+			background-color:yellow;
+		}
+		.validtarget{
+			background-color:lightblue;
+		}
+	</style>
+ </head>
+ <body>
+	<div id="container">
+		<header>
+			<h1>Tahoe 216</h1>
+			<h3 align="center">3 Days,216-Miles,One Crazy Tunner's High</h3>
+			<h2>&nbsp;</h2>
+			<h4>Live Results Now!</h4>
+		</header>
+		<nav>
+			<h2>Links</h2>
+			<a href="index.html" title="Home">Home</a>
+			<a href="signup.html" title="Are you crazy enough?">Sign up</a>
+			<a href="about.html" title="Learn more about the T216">About the Race</a>
+		</nav>
+		<section>
+			<article>
+				<p>Drag member ti either the Racers or Volunteers list.</p>
+				<ul id="members">
+					<li draggable="true" data-age="38">Brian Albers</li>
+					<li draggable="true" data-age="25">Frank Salim</li>
+					<li draggable="true" data-age="47">Jenniferr Clark</li>
+					<li draggable="true" data-age="18">John Kemble</li>
+					<li draggable="true" data-age="20">Lorraine Gaunce</li>
+					<li draggable="true" data-age="30">Mark Wang</li>
+					<li draggable="true" data-age="41">Morgan Stephen</li>
+					<li draggable="true" data-age="39">Peter Lubbers</li>
+					<li draggable="true" data-age="33">Vanessa Combs</li>
+					<li draggable="true" data-age="54">Vivian Lopez</li>
+				</ul>
+				<div class="dropList">
+					<fieldset id="racersField">
+						<legend>Racers(by Age):</legend>
+						<ul id="racers"></ul>
+					</fieldset>
+				</div>
+				<div class="dropList">
+					<fieldset id="volunteersField">
+					<legend>volunteers(by Name):</legend>
+					<ul id="volunteers"></ul>
+					</fieldset>
+				</div>
+			</article>
+		</section>
+		<aside>
+			<h2>Sponsors</h2>
+			<p align="center">Happy Trails Running Club</p>
+			<p align="center"><img id="happyTrails" src="happy-trails-rc.gif" alt="Happy Trails Running Club" width="149" height="207"></p>
+		</aside>
+		<footer>
+			<p>Powered by HTML5</p>
+		</footer>
+	</div>
+	<script type="text/javascript">
+		var racers=[];
+		var volunteers=[];
+		var racersList;
+		var volunteersList;
+		function loadDemo(){
+			racersList=document.getElementById("racers");
+			volunteersList=document.getElementById("volunteers");
+			var lists=[racersList,volunteersList];
+			lists.forEach(function(list){
+				list.addEventListener("dragenter",handleDragEnter,false);
+				list.addEventListener("dragleave",handleDragLeave,false);
+				list.addEventListener("drop",handleDrop,false);
+				list.addEventListener("dragover",handleDragOver,false);
+			})
+			var fieldsets=document.querySelectorAll("#racersField,#volunteersField");
+			[].forEach.call(fieldsets,function(fieldset){
+				fieldset.addEventListener("dragover",handleDragOverOuter,false);
+			})
+			var members=document.querySelectorAll("#members li");
+			[].forEach.call(members,function(member){
+				member.addEventListener("dragstart",handleDragStart,false);
+				member.addEventListener("dragend",handleDragEnd,false);
+			})
+		}
+		window.addEventListener("load",loadDemo);
+		function handleDragStart(evt){
+			var dragImage=document.getElementById("happyTrails");
+			evt.dataTransfer.setDragImage(dragImage,5,10);
+			evt.effectAllowed="copy";
+			evt.dataTransfer.setData("text/plain",evt.target.textContent);
+			evt.dataTransfer.setData("text/html",evt.target.dataset.age);
+			racersList.className="validtarget";
+			volunteersList.className="validtarget";
+			return true;
+		}
+		function handleDragEnter(evt){
+			evt.stopPropagation();
+			//用evt.preventDefault将默认当前进入的元素不是目标改成是目标
+			evt.preventDefault();
+			return false;
+		}
+		function handleDragLeave(evt){
+			return false;
+		}
+		function handleDragOverOuter(evt){
+			if(evt.target.id=="racersField"){
+				racersList.className="validtarget";
+			}else if(evt.target.id=="volunteersField"){
+				volunteersList.className="validtarget";
+			}
+			evt.stopPropagation();
+			return false;
+		}
+		function handleDragOver(evt){
+			evt.dataTransfer.dropEffect="copy";
+			evt.stopPropagation();
+			evt.preventDefault();
+			//用evt.preventDefault将默认不能在当前元素内copy内容，改为能够copy内容，因为浏览器默认的操作是（不允许在此处放置）为DROP事件做好准备
+			evt.target.className="highlighted";
+			return false;
+		}
+		function handleDrop(evt){
+			/*用evt.preventDefault屏蔽默认的放置动作，默认动作依赖于放置元素位置和类型，如放置元素是图像类型，那么浏览器会加以显示，若为链接就会进行页面的跳转。这里需要完全控制放置动作于是取消了所有的默认操作。*/
+			evt.preventDefault();
+			//组织该动作想其他事件处理器传播
+			evt.stopPropagation();
+			var dropTarget=evt.target;
+			var text=evt.dataTransfer.getData("text/plain");
+			var group=volunteers;
+			var list=volunteersList;
+			if((dropTarget.id!=="volunteers")&&(dropTarget.parentNode.id!="volunteers")){
+				text=evt.dataTransfer.getData("text/html")+":"+text;
+				group=racers;
+				list=racersList;
+			}
+			if(group.indexOf(text)==-1){
+				group.push(text);
+				group.sort();
+				while(list.hasChildNodes()){
+					list.removeChild(list.lastChild);
+				}
+				[].forEach.call(group,function(person){
+					var newChild=document.createElement("li");
+					newChild.textContent=person;
+					list.appendChild(newChild);
+				});
+			}
+			return false;
+		}
+		function handleDragEnd(evt){
+			racersList.className=null;
+			volunteersList.className=null;
+			return false;
+		}
+	</script>
+ </body>
+</html>

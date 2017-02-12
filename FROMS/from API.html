@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+ <head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="王佳蕾">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>from API</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+ </head>
+ <body>
+	<label for="age">Age</label>
+	<input id="age" type="range" min="18" max="120" value="18" onchange="(function(){ageDisplay.value=value})()">
+	<output id="ageDisplay">18</output><br/>
+	<progress value="30" max="100"></progress>
+	<input type="color"></input>
+	<input type="month"></input><br/>
+	<input type="email" id="contacts" list="contactList">
+	<datalist id="contactList">
+		<option value="x@example.com" label="Racer X">
+		<option value="peter@example.com" label="Peter">
+	</datalist>
+	<input id="confidence" name="lever" type="range"  step="5" value="0" min="0" max="100" onchange="ageD.value=value"/>
+	<output id="ageD">0</output><br/>
+	<script>
+		var confidence=document.getElementById("confidence");
+		alert(confidence.valueAsNumber());
+	</script>
+ </body>
+</html>

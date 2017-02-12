@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+ <head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="王佳蕾">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<title>canvas</title>
+ </head>
+ <body>
+	<canvas id="diagonal" style="border:1px solid;" width="400" height="600"></canvas>
+	<script type="text/javascript">
+			var canvas=document.getElementById("diagonal");
+
+			var gravel=new Image();
+			gravel.src="gravel.jpg";
+			gravel.onload=function(){
+				drawTrails();
+			};
+			
+			var rain=new Image();
+			rain.src="rain.png";
+			rain.onload=function(){
+				window.requestAnimFrame(loopAnimation,canvas);
+			};
+			/*rain.onload=function(){
+				drawAFrame();
+			}*/
+		function createCanopyPath(context){
+			context.beginPath();
+			context.moveTo(-25,-50);
+			context.lineTo(-10,-80);
+			context.lineTo(-20,-80);
+			context.lineTo(-5,-110);
+			context.lineTo(-15,-110);
+			context.lineTo(0,-140);
+			context.lineTo(15,-110);
+			context.lineTo(5,-110);
+			context.lineTo(20,-80);
+			context.lineTo(10,-80);
+			context.lineTo(25,-50);
+			context.closePath();
+		}
+		function drawTrails(){
+			var context=canvas.getContext("2d");
+
+			context.save();
+			context.clearRect(0,0,400,600);//在动画每一帧重复执行时要记得清屏
+			context.translate(130,250);
+			drawTree(context);
+			context.restore();
+
+			context.save();
+			context.translate(260,500);
+			context.scale(2,2);
+			drawTree(context);
+			context.restore();
+
+			context.save();
+			context.translate(-10,350);
+			context.beginPath();
+			context.moveTo(0,0);
+		    context.quadraticCurveTo(170,-50,260,-190);
+			context.quadraticCurveTo(310,-250,410,-250);
+			context.strokeStyle=context.createPattern(gravel,'repeat');
+			context.lineWidth=20;
+			context.stroke();
+			context.restore();
+
+			context.save();
+			context.font="60px impact";
+			context.fillStyle="#996600";
+			context.textAlign='center';
+			context.shadowColor='rgba(0,0,0,0.2)';
+			context.shadowOffsetX=15;
+			context.shadowOffsetY=-10;
+			context.shadowBlur=2;
+			context.fillText('Happy Trails',200,60,400);
+			context.restore();
+		}
+		function drawTree(context){
+			context.save();
+			//这里transform变换的是图像上每一个点的横纵坐标
+			context.transform(1,0,-0.5,1,0,0);
+			//这里缩放的是当前绘图的高度，而不是所有点的纵坐标,如果只改变纵坐标会导致图像的旋转角度改变，但这里只要求改变图像高度。
+			//context.scale(1,0.6);
+			context.fillStyle="rgba(0,0,0,.2)";
+			context.fillRect(-5,-50,10,50);
+			createCanopyPath(context);
+			context.fill();
+			context.restore();
+
+			var trunkGradient=context.createLinearGradient(-5,-50,5,-50);
+			trunkGradient.addColorStop(0,"#663300");
+			trunkGradient.addColorStop(0.4,"#996600");
+			trunkGradient.addColorStop(1,"#552200");
+			context.fillStyle=trunkGradient;
+			context.fillRect(-5,-50,10,50);
+
+		   var canopyShadow=context.createLinearGradient(0,-50,0,0);
+			canopyShadow.addColorStop(0,"rgba(0,0,0,0.5)");
+			canopyShadow.addColorStop(0.2,"rgba(0,0,0,0.0)");
+			context.fillStyle=canopyShadow;
+			context.fillRect(-5,-50,10,50);
+			createCanopyPath(context);
+			context.lineWidth=4;
+			context.lineJoin='round';
+			context.strokeStyle="#663300";
+			context.stroke();
+			context.fillStyle="#339900";
+			context.fill();
+			
+			//context.drawImage(bark,-5,-50,10,50);
+		}
+		window.requestAnimFrame=(function(){
+			return window.requestAnimationFrame||
+				   window.webkitRequestAnimationFrame||
+				   window.mozRequestAnimationFrame||
+				   window.oRequestAnimationFrame||
+				   window.msRequestAnimationFrame||
+				   function(callback){
+					   window.setTimeout(callback,1000/60);
+				   }
+		})();
+		function drawAFrame(){
+			var context=canvas.getContext("2d");
+			context.save();
+
+			drawTrails();
+			if(Math.random()>.01){
+				context.globalAlpha=0.65;
+				context.fillStyle="#000000";
+				context.fillRect(0,0,400,600);
+				context.globalAlpha=1.0;
+			}
+			var now=Date.now();
+			context.fillStyle=context.createPattern(rain,'repeat');
+			context.save();
+			context.translate(-256+(0.1*now)%256,-256+(0.5*now)%256);
+			context.fillRect(0,0,400+256,600+256);
+			context.restore();
+			context.save();
+			context.translate(-256+(0.08*now)%256,-256+(0.2*now)%256);
+			context.fillRect(0,0,400+256,600+256);
+			context.restore();
+			context.font="32px san-serif";
+			context.textAlign='center';
+			context.fillStyle="#990000";
+			context.fillText('Event canceled due to weather!',200,550,400);
+
+			context.restore();
+		}
+		function loopAnimation(currentTime){
+			drawAFrame();
+			window.requestAnimFrame(loopAnimation,canvas);
+		}
+		//window.addEventListener("load",drawTrails,true);
+	</script>
+ </body>
+</html>

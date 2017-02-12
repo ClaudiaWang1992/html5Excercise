@@ -1,0 +1,68 @@
+<!DOCTYPE html>  
+<html>  
+  <head>  
+    <meta charset="utf-8"/>  
+    <title>requestAnimFrame</title>  
+    </head>  
+  <body> 
+   <script type="text/javascript">  
+  
+      // requestAnim shim layer by Paul Irish  
+            window.requestAnimFrame = (function(){  
+                return  window.requestAnimationFrame       ||  
+                  window.webkitRequestAnimationFrame ||  
+                  window.mozRequestAnimationFrame    ||  
+                  window.oRequestAnimationFrame      ||  
+                  window.msRequestAnimationFrame     ||  
+                  function(/* function */ callback, /* DOMElement */ element){  
+                    window.setTimeout(callback, 1000 / 60);  
+                  };  
+            })();  
+  
+  
+      // example code from mr doob : http://mrdoob.com/lab/javascript/requestanimationframe/  
+  
+      var canvas, context;  
+  
+      function init() {  
+  
+        canvas = document.createElement( 'canvas' );  
+        canvas.width = 256;  
+        canvas.height = 256;  
+  
+        context = canvas.getContext( '2d' );  
+  
+        document.body.appendChild( canvas );  
+  
+      }  
+  
+      function animate() {  
+		draw();
+        requestAnimFrame( animate );    
+  
+      }  
+  
+      function draw() {  
+  
+        var time = new Date().getTime() * 0.002;  
+        var x = Math.sin( time ) * 96 + 128;  
+        var y = Math.cos( time * 0.9 ) * 96 + 128;  
+  
+        context.fillStyle = 'rgb(245,245,245)';  
+        context.fillRect( 0, 0, 255, 255 );  
+  
+        context.fillStyle = 'rgb(255,0,0)';  
+        context.beginPath();  
+        context.arc( x, y, 10, Math.PI*0, Math.PI*2, true );  
+        context.closePath();  
+        context.fill();  
+  
+      }  
+      window.onload = function(){  
+        init()  
+        animate();  
+      }  
+  
+    </script>   
+</body>  
+</html>  
